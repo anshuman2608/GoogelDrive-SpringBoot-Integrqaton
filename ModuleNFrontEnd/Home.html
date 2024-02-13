@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModuleN</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #fff;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #555;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .connect-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#"><i class="fas fa-home"></i> Home</a>
+    <a href="#"><i class="fas fa-th"></i> My Apps</a>
+    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+</div>
+
+<div class="content">
+    <h1>project ModuleN</h1>
+    
+    <div class="connect-box">
+        <h2>Connect with Google Drive</h2>
+        <div id="connectDrive" onclick="getDriveContent()">
+            
+            <button class="btn btn-primary">Connect with Drive</button>
+        </div>
+    </div>
+
+    <div class="connect-box">
+        <h2>Connect with Google Sheets</h2>
+        <div id="connectSheet" onclick="getSheetContents()">
+            <button class="btn btn-primary">Connect with Google Sheets</button>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<!-- Bootstrap JS and jQuery (Optional) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Custom Script -->
+<script>
+    // JavaScript to handle button clicks
+    // $(document).ready(function() {
+    //     $('#connectDrive button').click(function() {
+    //         $.ajax({
+    //             url: 'http://localhost:8080/drive/files',
+    //             type: 'GET',
+    //             success: function(response) {
+    //                 alert('Connected with Google Drive successfully!');
+    //                 // You can perform further actions upon successful connection
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error('Error connecting with Google Drive:', error);
+    //                 alert('Error connecting with Google Drive. Please try again later.');
+    //             }
+    //         });
+    //     });
+
+    //     $('#connectSheet button').click(function() {
+    //         $.ajax({
+    //             url: 'http://localhost:8080/sheet/list',
+    //             type: 'GET',
+    //             success: function(response) {
+    //                 alert('Connected with Google Sheets successfully!');
+    //                 // You can perform further actions upon successful connection
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error('Error connecting with Google Sheets:', error);
+    //                 alert('Error connecting with Google Sheets. Please try again later.');
+    //             }
+    //         });
+    //     });
+    // });
+
+    function getDriveContent(){
+        
+        //http://localhost:8080/drive/files
+
+        fetch("http://localhost:8080/drive/files")
+        .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Manipulate the received data
+      console.log(data);
+      
+      const jsonData = JSON.stringify(data);
+
+
+      localStorage.setItem('driveData', jsonData);
+
+      //window.open('drive.html', '_blank');
+
+      window.location.href = 'drive.html';
+
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+
+    }
+
+    function getSheetContents(){
+        //test
+        console.log("sheet function working");
+        
+        //http://localhost:8080/drive/files
+
+        fetch("http://localhost:8080/sheet/list")
+        .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+      //window.location.href = 'sheet.html';
+
+    })
+    .then(data => {
+      // Manipulate the received data
+      console.log(data);
+      
+      const jsonData = JSON.stringify(data);
+
+
+      localStorage.setItem('sheetData', jsonData);
+
+      //window.open('drive.html', '_blank');
+
+      window.location.href = 'sheet.html';
+
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+
+    }
+
+</script>
+
+
+</body>
+</html>

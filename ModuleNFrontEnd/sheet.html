@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets</title>
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #fff;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #555;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .connect-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        #grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-gap: 20px;
+}
+
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+.my-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.my-table th, .my-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.my-table th {
+    background-color: #f2f2f2;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="#" onclick="goToHomePage()"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-th"></i> My Apps</a>
+        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+    
+    <div class="content" id="grid-container">
+        <h2>Google Sheets</h2>
+
+      
+
+    </div>
+
+    <script>
+
+       function goToHomePage(){
+
+        window.location.href = 'Home.html';
+       }
+
+
+
+        const retrievedData = localStorage.getItem('sheetData');
+        
+        // Convert the JSON string back to a JavaScript object
+        const parsedData = JSON.parse(retrievedData);
+        
+        const gridContainer = document.getElementById('grid-container');
+
+        
+        //console.log(parsedData, "i am in sheet function");
+        
+        parsedData.forEach(item => {
+            // Create a grid item element
+            const gridItem = document.createElement('div');
+
+
+
+            //function to dispaly onclick on the each sheet item.
+            gridItem.addEventListener("click",function displaytable(){
+                
+                    const sheetId=item.id ;
+                   fetch("http://localhost:8080/sheet/data/"+sheetId) 
+                    .then(response => {
+              if (!response.ok) {
+               throw new Error('Network response was not ok');
+            }
+             return  response.json();
+      //window.location.href = 'sheet.html';
+
+    })
+    .then(data => {
+      // Manipulate the received data
+      console.log(data,"i am table data");
+
+      gridContainer.innerHTML="";
+
+      //const newDiv=document.createElement("div");
+
+      var table = document.createElement("table");
+      table.classList.add("my-table");
+    // Create and append header row
+    var headerRow = document.createElement("tr");
+    data[0].forEach(function(header) {
+        var th = document.createElement("th");
+        th.textContent = header;
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    // Create and append data rows
+    for (var i = 1; i < data.length; i++) {
+        var row = document.createElement("tr");
+        data[i].forEach(function(cell) {
+            var td = document.createElement("td");
+            td.textContent = cell;
+            row.appendChild(td);
+        });
+        table.appendChild(row);
+    }
+      
+      gridContainer.appendChild(table);
+
+      
+      
+
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+               
+                   
+            //function ends here       
+            });
+
+
+
+
+
+
+            gridItem.classList.add('grid-item');
+        
+            // Create an image element for the thumbnail
+            const thumbnailImg = document.createElement('img');
+            thumbnailImg.src = item.thumbnailLink;
+            thumbnailImg.alt = item.name;
+        
+            // Create a paragraph element for the name
+            const namePara = document.createElement('p');
+            namePara.textContent = item.name;
+        
+            // Append image and paragraph to grid item
+            gridItem.appendChild(thumbnailImg);
+            gridItem.appendChild(namePara);
+        
+            // Append grid item to grid container
+            gridContainer.appendChild(gridItem);
+          });
+        
+        
+        
+            </script>
+
+    
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #fff;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #555;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .connect-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        #grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-gap: 20px;
+}
+
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="#"  onclick="goToHomePage()"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-th"></i> My Apps</a>
+        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+    
+    <div class="content" id="grid-container">
+
+
+
+    </div>
+
+    
+
+    <script>
+        function goToHomePage(){
+
+window.location.href = 'Home.html';
+}
+
+const retrievedData = localStorage.getItem('driveData');
+
+// Convert the JSON string back to a JavaScript object
+const parsedData = JSON.parse(retrievedData);
+
+const gridContainer = document.getElementById('grid-container');
+
+console.log(parsedData, "i am superman");
+
+parsedData.forEach(item => {
+    // Create a grid item element
+    const gridItem = document.createElement('div');
+    gridItem.classList.add('grid-item');
+
+    // Create an image element for the thumbnail
+    const thumbnailImg = document.createElement('img');
+    thumbnailImg.src = item.thumbnailLink;
+    thumbnailImg.alt = item.name;
+
+    // Create a paragraph element for the name
+    const namePara = document.createElement('p');
+    namePara.textContent = item.name;
+
+    // Append image and paragraph to grid item
+    gridItem.appendChild(thumbnailImg);
+    gridItem.appendChild(namePara);
+
+    // Append grid item to grid container
+    gridContainer.appendChild(gridItem);
+  });
+
+
+
+    </script>
+    
+</body>
+</html>
